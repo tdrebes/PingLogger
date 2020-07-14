@@ -6,7 +6,7 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:PingLogger"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="650" 
+        Title="PingLogger" Height="450" Width="650" 
         FlowDirection="LeftToRight" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" StateChanged="Window_StateChanged" Closing="Window_Closing">
     <!--AllowsTransparency="True"
         WindowStyle="None" MouseDown="Window_MouseDown"
@@ -71,13 +71,14 @@
             </Grid>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="12*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0" HorizontalAlignment="Left">
+                <Grid Grid.Column="1" HorizontalAlignment="Left">
                     <Grid Grid.Column="0" Margin="15,10,0,0" Panel.ZIndex="1">
                         <StackPanel HorizontalAlignment="Left" >
                             <CheckBox x:Name="LogTimeouts_Checkbox" Checked="LogTimeouts_Checkbox_Checked" Unchecked="LogTimeouts_Checkbox_Unchecked" IsChecked="True">Only log Timeouts</CheckBox>
+                            <CheckBox Name="PauseOnMinimize_Checkbox" Checked="PauseOnMinimize_Checkbox_Checked" Unchecked="PauseOnMinimize_Checkbox_Unchecked" IsChecked="False">Pause Graph when hidden</CheckBox>
                             <CheckBox Name="AutoRefresh_Checkbox" Checked="AutoRefresh_Checkbox_Checked" Unchecked="AutoRefresh_Checkbox_Unchecked">Auto-Refresh (5s)</CheckBox>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Button Width="45" Height="20" x:Name="ClearTable_Button" Margin="5" Click="ClearTable_Button_Click">Clear</Button>
@@ -88,7 +89,7 @@
                         </StackPanel>
                     </Grid>
                 </Grid>
-                <DataGrid Grid.Column="1"  x:Name="DataGrid1" GridLinesVisibility="None" Style="{StaticResource DataGridStyle}" ColumnWidth="*" IsReadOnly="True">
+                <DataGrid Grid.Column="0"  x:Name="DataGrid1" GridLinesVisibility="None" Style="{StaticResource DataGridStyle}" ColumnWidth="*" IsReadOnly="True">
 
                 </DataGrid>
             </Grid>

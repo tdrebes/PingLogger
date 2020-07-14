@@ -43,11 +43,14 @@ namespace PingLogger
         public static DataGrid pingDataGrid;
         public DispatcherTimer dispatcherTimer;
         private NotifyIcon nIcon = null;
+        public bool isVisible = true;
+        public bool pauseGraphOnMinimize;
 
         public MainWindow()
         {
             InitializeComponent();
             FixMenuOrientation();
+            pauseGraphOnMinimize = PauseOnMinimize_Checkbox.IsChecked.GetValueOrDefault();
 
             //Tray Icon:
             nIcon = new NotifyIcon();
@@ -59,8 +62,9 @@ namespace PingLogger
                 nIcon.Icon = icon;
 
                 ContextMenuStrip cMenuStrip = new ContextMenuStrip();
-                cMenuStrip.Items.Add("Exit", null, NotifyIconMenuExit_Click);
                 cMenuStrip.Items.Add("Show/Hide", null, NotifyIconMenuShowHide_Click);
+                cMenuStrip.Items.Add(new ToolStripSeparator());
+                cMenuStrip.Items.Add("Exit", null, NotifyIconMenuExit_Click);
                 nIcon.ContextMenuStrip = cMenuStrip;
                 nIcon.DoubleClick += new EventHandler(NotifyIconMenuShowHide_Click);
 
@@ -272,7 +276,7 @@ namespace PingLogger
         private void Help_run(object sender, ExecutedRoutedEventArgs e)
         {
             Debug.WriteLine("help...");
-            string url = "https://tdrebes.github.io/";
+            string url = "https://github.com/tdrebes/PingLogger";
             try
             {
                 Process.Start(url);
@@ -352,7 +356,7 @@ namespace PingLogger
                 case WindowState.Minimized:
                     Debug.WriteLine("minized");
                     //hide / minimize to tray:
-                    Visibility = Visibility.Hidden;
+                    ToggleVisibility();
                     break;
                 case WindowState.Normal:
 
@@ -380,6 +384,7 @@ namespace PingLogger
         {
             if (Visibility == Visibility.Hidden)
             {
+                isVisible = true;
                 Visibility = Visibility.Visible;
                 System.Windows.Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background,
                     new Action(delegate ()
@@ -391,9 +396,19 @@ namespace PingLogger
             }
             else
             {
+                isVisible = false;
                 Visibility = Visibility.Hidden;
             }
         }
 
+        private void PauseOnMinimize_Checkbox_Checked(object sender, RoutedEventArgs e)
+        {
+            pauseGraphOnMinimize = true;
+        }
+
+        private void PauseOnMinimize_Checkbox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            pauseGraphOnMinimize = false;
+        }
     }
 }

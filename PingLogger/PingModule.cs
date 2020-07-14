@@ -69,14 +69,23 @@ namespace PingLogger
                         if(!onlyLogTimeouts) MainWindow.dbConnector.InsertPing(ping);
 
                     }
-                    //MainWindow.graph.Values.Add(new ObservableValue(value));
-                    MainWindow.graph.Values.Add(new ObservableValue(value));
-                    if (n >= 20)
-                    {
-                        MainWindow.graph.Values.RemoveAt(0);
-                    }
-                    n++;
 
+                    
+                    //only update graph if window is not hidden
+                    if (!MainWindow.mainWindow.isVisible && MainWindow.mainWindow.pauseGraphOnMinimize)
+                    {
+                        Debug.WriteLine("Graph is hidden...");
+                        //dont show if hidden
+                    }
+                    else
+                    {
+                        MainWindow.graph.Values.Add(new ObservableValue(value));
+                        if (n >= 20)
+                        {
+                            MainWindow.graph.Values.RemoveAt(0);
+                        }
+                        n++;
+                    }
                 }
 
 
