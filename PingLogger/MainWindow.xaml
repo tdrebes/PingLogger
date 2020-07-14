@@ -1,0 +1,98 @@
+﻿<Window x:Class="PingLogger.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        xmlns:local="clr-namespace:PingLogger"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="650" 
+        FlowDirection="LeftToRight" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" StateChanged="Window_StateChanged" Closing="Window_Closing">
+    <!--AllowsTransparency="True"
+        WindowStyle="None" MouseDown="Window_MouseDown"
+        Background="Transparent"-->
+
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="S" Command="Save"/>
+        <KeyBinding Modifiers="Ctrl" Key="X" Command="Close"/>
+    </Window.InputBindings>
+    <Window.CommandBindings>
+        <CommandBinding Command="Save" CanExecute="SaveFile_active" Executed="SaveFile_run"/>
+        <CommandBinding Command="Help" CanExecute="Help_active" Executed="Help_run"/>
+        <CommandBinding Command="Close" CanExecute="Close_CanExecute" Executed="Close_Executed"/>
+    </Window.CommandBindings>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" Height="20">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open" IsEnabled="False"/>
+                <MenuItem Header="_Save" Command="Save">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/saveIcon.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="_Exit" Command="Close"/>
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Settings" IsEnabled="False"/>
+            </MenuItem>
+            <MenuItem Header="?">
+                <MenuItem Header="_Help" Command="Help"/>
+            </MenuItem>
+        </Menu>
+        <StatusBar DockPanel.Dock="Bottom" x:Name="StatusBar1">
+            <StatusBarItem>
+                <TextBlock x:Name="StatusText1"/>
+            </StatusBarItem>
+        </StatusBar>
+        <Grid DockPanel.Dock="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Grid DockPanel.Dock="Top">
+
+                <Grid Background="Transparent" Grid.Column="1" Panel.ZIndex="0" Margin="10,10,0,0">
+                    <lvc:CartesianChart Grid.Row="2" Margin="0, 0, 0, 0" Series="{Binding LastHourSeries}" Hoverable="False" DataTooltip="{x:Null}" x:Name="Chart1"
+                                        Background="Transparent">
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis MinValue="1" Foreground="Black">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator IsEnabled="False"/>
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis ShowLabels="False"/>
+                            <lvc:Axis MinValue="1" Foreground="Black"></lvc:Axis>
+                        </lvc:CartesianChart.AxisX>
+                    </lvc:CartesianChart>
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="12*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0" HorizontalAlignment="Left">
+                    <Grid Grid.Column="0" Margin="15,10,0,0" Panel.ZIndex="1">
+                        <StackPanel HorizontalAlignment="Left" >
+                            <CheckBox x:Name="LogTimeouts_Checkbox" Checked="LogTimeouts_Checkbox_Checked" Unchecked="LogTimeouts_Checkbox_Unchecked" IsChecked="True">Only log Timeouts</CheckBox>
+                            <CheckBox Name="AutoRefresh_Checkbox" Checked="AutoRefresh_Checkbox_Checked" Unchecked="AutoRefresh_Checkbox_Unchecked">Auto-Refresh (5s)</CheckBox>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button Width="45" Height="20" x:Name="ClearTable_Button" Margin="5" Click="ClearTable_Button_Click">Clear</Button>
+                                <Button Width="45" Height="20" Click="UpdateGrid_Click" x:Name="Refresh_Button" Margin="5">Refresh</Button>
+                            </StackPanel>
+                            <Button Width="40" Height="20" Click="Ping_Click" IsEnabled="False" Visibility="Hidden">Ping</Button>
+                            <Button Width="40" Height="20" Click="CreateDatabase_Click" IsEnabled="False" Visibility="Hidden">DB</Button>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+                <DataGrid Grid.Column="1"  x:Name="DataGrid1" GridLinesVisibility="None" Style="{StaticResource DataGridStyle}" ColumnWidth="*" IsReadOnly="True">
+
+                </DataGrid>
+            </Grid>
+        </Grid>
+        
+    </DockPanel>
+</Window>
