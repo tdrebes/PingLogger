@@ -42,7 +42,7 @@ namespace PingLogger
         public static bool autoRefresh;
         public static DataGrid pingDataGrid;
         public DispatcherTimer dispatcherTimer;
-        private NotifyIcon nIcon = null;
+        public static NotifyIcon nIcon = null;
         public bool isVisible = true;
         public bool pauseGraphOnMinimize;
 
@@ -51,6 +51,10 @@ namespace PingLogger
             InitializeComponent();
             FixMenuOrientation();
             pauseGraphOnMinimize = PauseOnMinimize_Checkbox.IsChecked.GetValueOrDefault();
+
+
+            
+
 
             //Tray Icon:
             nIcon = new NotifyIcon();
@@ -70,6 +74,9 @@ namespace PingLogger
 
                 nIcon.Visible = true;
             }
+
+
+
 
             mainWindow = this;
             this.DataContext = this;
@@ -120,6 +127,11 @@ namespace PingLogger
             };
 
             Chart1.Series = new SeriesCollection(){ graph };
+
+            //Icon:
+            Task updatePingTask = new Task(PingIcon.updatePing);
+            updatePingTask.Start();
+
 
             KeyBinding SaveFileKeyBinding = new KeyBinding(
                 ApplicationCommands.Save, Key.S, ModifierKeys.Control);
@@ -303,11 +315,6 @@ namespace PingLogger
             }
         }
 
-        void notifyIcon_Click(object sender, EventArgs e)
-        {
-            //ShowQuickLaunchMenu();
-        }
-
         public static Icon CreateTextIcon(string str)
         {
             int fontsize;
@@ -410,5 +417,7 @@ namespace PingLogger
         {
             pauseGraphOnMinimize = false;
         }
+
+        
     }
 }
